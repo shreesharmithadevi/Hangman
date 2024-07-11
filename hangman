@@ -1,0 +1,62 @@
+import java.util.Scanner;
+import java.util.Random;
+public class Hangman {
+    private String word;
+    private char[] guessedLetters;
+    private int attempts;
+    private String[] wordList = {"building", "cookies", "laugh", "ruby", "singer", "watermelon", "kingdom", "education", "keyboard", "computer"};
+    public Hangman() {
+        Random random = new Random();
+        this.word = wordList[random.nextInt(wordList.length)];
+        this.guessedLetters = new char[word.length()];
+        this.attempts = 6;
+    }
+    public void play() {
+        Scanner scanner = new Scanner(System.in);
+        while (attempts > 0){
+            System.out.println("Guess a letter:");
+            char guess = scanner.next().charAt(0);
+            boolean correct = false;
+            for (int i = 0; i < word.length(); i++) {
+                if (word.charAt(i) == guess) {
+                    guessedLetters[i] = guess;
+                    correct = true;
+                }
+            }
+            if (!correct) {
+                attempts--;
+                System.out.println("Incorrect! Attempts remaining: " + attempts);
+            }
+            printWord();
+            if (isWon()) {
+                System.out.println("Congratulations! You won!");
+                break;
+            }
+        }
+        if (attempts == 0) {
+            System.out.println("Game over! The word was: " + word);
+        }
+    }
+    private void printWord() {
+        for (char c : guessedLetters) {
+            if (c == 0) {
+                System.out.print("_ ");
+            } else {
+                System.out.print(c + " ");
+            }
+        }
+        System.out.println();
+    }
+    private boolean isWon() {
+        for (char c : guessedLetters) {
+            if (c == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        Hangman hangman = new Hangman();
+        hangman.play();
+    }
+}
